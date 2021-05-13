@@ -14,7 +14,7 @@ const LocalStrategy = require('passport-local')
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const flash = require('connect-flash');
-const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+
 //my own modules
 const ExpressError = require('./utils/ExpressError');
 
@@ -25,10 +25,10 @@ const helmet = require("helmet");// Helmet helps you secure your Express apps by
 const MongoStore = require('connect-mongo');
 
 
-
+const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
 
 //'mongodb://localhost:27017/yelp-camp'
-mongoose.connect(dbUrl, {
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -54,7 +54,7 @@ app.use(helmet());// using it will let us using all the middleware that comes wi
 
 const secret = process.env.SECRET || 'thisshouldbeabettersecret';
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
+    mongoUrl: dbURL,
     touchAfter: 24 * 60 * 60,
     crypto: {
         secret,
@@ -69,7 +69,7 @@ const sessionConfig = {
     store,
     name: '_fyc',// this in order not to use the default cookie name (without this it shows connect.id), 
     // and there might be a hacker and use it for his own script  and use this field connect.id 
-    secret, ,
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -170,8 +170,10 @@ app.use((err, req, res, next) => {
 
 })
 
-app.listen(3000, () => {
-    console.log('serving on port 3000');
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`serving on port ${port}`);
 })
 
 
