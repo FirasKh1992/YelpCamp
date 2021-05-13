@@ -16,4 +16,5 @@ router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReview))
 
 router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))
 
+//exports the router in order to use it in other modules
 module.exports = router;
